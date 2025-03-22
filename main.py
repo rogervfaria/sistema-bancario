@@ -9,7 +9,10 @@ def menu():
     [1] -> Depositar
     [2] -> Sacar
     [3] -> Extrato
-    [4] -> Sair
+    [4] -> Novo usuário
+    [5] -> Nova conta
+    [6] -> Listar contas
+    [7] -> Sair
     '''
 
     return input(f'{menu}\nDigite a opção desejada: ')
@@ -57,12 +60,63 @@ def exibir_extrato(saldo, /, *, extrato):
     print('=' * 57)
 
 
+def criar_usuario(usuarios):
+    cpf = input('\nCPF (somente números): ')
+    usuario = filtrar_usuario(cpf, usuarios)
+
+    if usuario:
+        print('Já existe usuário cadastrado com esse CPF!')
+    
+    else:
+        nome = input('Nome completo: ')
+        data_nascimento = input('Data de nascimento (dd-mm-aaaa): ')
+        endereco = input('Endereço ((logradouro, nº - bairro - cidade/sigla estado)): ')
+        print('\nUsuário cadastrado com sucesso!')
+    
+        usuarios.append(
+                    {'Nome completo': nome, 
+                    'Data de nascimento': data_nascimento,
+                    'CPF': cpf,
+                    'Endereço': endereco}
+        )
+
+
+def filtrar_usuario(cpf, usuarios):
+    usuarios_filtrados = [usuario for usuario in usuarios if usuario['CPF'] == cpf]
+    return usuarios_filtrados[0] if usuarios_filtrados else None
+
+
+def criar_conta(agencia, numero_conta, usuarios, contas):
+    cpf = input('\nCPF (somente números): ')
+    usuario = filtrar_usuario(cpf, usuarios)
+
+    if usuario:
+        print('\nConta criada com sucesso!')
+        contas.append({'Agência': agencia, 'Conta': numero_conta, 'Usuário': usuario})
+
+    else:
+        print('\nUsuário não encontrado! Por favor, crie um usuário antes.')
+
+
+def listar_contas(contas, agencia):
+    print('\n====================CONTAS====================')
+    for conta in contas:
+        print(f'''\nAgência: {agencia}
+        Conta: {conta['Conta']}
+        Titular: {conta['Usuário']['Nome completo']}\n
+        -----------------------------------------------------
+        ''')
+
+
 def main():
     limite_saque = 500
     limite_transacoes = 10
     contador_trasacoes = 0
     saldo = 0
     extrato = ''
+    usuarios = []
+    contas = []
+    agencia = '0001'
 
     while True:
         opcao = int(menu())
@@ -92,8 +146,18 @@ def main():
             exibir_extrato(saldo, extrato=extrato)
 
         elif opcao == 4:
+            criar_usuario(usuarios)
+
+        elif opcao == 5:
+            numero_conta = len(contas) + 1
+            criar_conta(agencia, numero_conta, usuarios, contas)
+
+        elif opcao == 6:
+            listar_contas(contas, agencia)
+
+        elif opcao == 7:
             break
-        
+  
         else:
             print('Opção inválida! Tente novamente.')
 
