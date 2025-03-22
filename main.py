@@ -101,10 +101,11 @@ def criar_conta(agencia, numero_conta, usuarios, contas):
 def listar_contas(contas, agencia):
     print('\n====================CONTAS====================')
     for conta in contas:
-        print(f'''\nAgência: {agencia}
-        Conta: {conta['Conta']}
-        Titular: {conta['Usuário']['Nome completo']}\n
-        -----------------------------------------------------
+        print(f'''
+                Agência: {agencia}
+                Conta: {conta['Conta']}
+                Titular: {conta['Usuário']['Nome completo']}\n
+            -------------------------------------------------------
         ''')
 
 
